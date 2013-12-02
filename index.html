@@ -10,25 +10,103 @@
     <link type="text/css" rel="stylesheet" href="../tools/test/syntaxhighlighter/styles/shCoreDefault.css"/>
     <script type="text/javascript">SyntaxHighlighter.all();</script>
 
-    <script src="../../tools/test/runner.js"></script>
+    <script src="../tools/test/runner.js"></script>
     <script src="../tools/test/mocha/mocha.js"></script>
     <script src="../tools/test/chai/chai.js"></script>
+    <script src="../tools/test/should/should.js"></script>
     <script src="../tools/test/mocha-htmltest.js"></script>
-    <script src="../../appmaker/public/vendor/polymer/polymer.min.js" debug></script>
+
+    <link rel="import" href="../appmaker/public/ceci/ceci-element.html">
+    <link rel="import" href="../appmaker/public/ceci/ceci-element-base.html">
+    <link rel="import" href="../appmaker/public/ceci/ceci-broadcast.html">
+    <link rel="import" href="../appmaker/public/ceci/ceci-listen.html">
+    <link rel="import" href="../appmaker/public/ceci/ceci-app.html">
+    <link rel="import" href="../appmaker/public/ceci/ceci-card-base.html">
+    <link rel="import" href="../appmaker/public/ceci/ceci-card.html">
+    <link rel="import" href="../appmaker/public/ceci/test/fixtures/ceci-value-holder.html">
+    <!-- This is the component we're actually testing -->
+    <link rel="import" href="component.html">
+    <link rel="import" href="../component-button/component.html">
+    <script src="../appmaker/public/vendor/polymer/polymer.min.js"></script>
   </head>
-  <body>
-    <div id="mocha">
-    <h1>Appmaker component test runner</h1>
-    </div>
-    <div id="codes"></div>
-    <script>
-      mocha.setup({ui: 'tdd', slow: 2000, htmlbase: ''});
-    </script>
-    <script src="test/js/counter.js"></script>
-    <script>
+<body>
+  <!-- The skeleton app we'll be using to test -->
+  <ceci-app id="hello-app">
+    <ceci-card visible>
+      <ceci-top>
+        <ceci-counter id="hello-counter" class="hi" countItem="" increment="1">
+        </ceci-counter>
+      </ceci-top>
+      <ceci-middle>
+        <ceci-button id="decrement-button" class="hi" label="-1">
+          <ceci-broadcast on="yellow" from="click"></ceci-broadcast>
+        </ceci-button>
+        <ceci-button id="increment-button" class="hi" label="+1">
+          <ceci-broadcast on="red" from="click"></ceci-broadcast>
+        </ceci-button>
+        <ceci-value-holder id="value-holder">
+          <ceci-listen id="count-up" on="blue" for="countUp"></ceci-listen>
+          <ceci-listen on="yellow" for="countDown"></ceci-listen>
+          <ceci-listen on="red" for="resetCount"></ceci-listen>
+        </ceci-value-holder>
+      </ceci-middle>
+      <ceci-bottom>
+      </ceci-bottom>
+    </ceci-card>
+  </ceci-app>
+  <div id="mocha">
+  <h1>Appmaker component test runner</h1>
+  </div>
+  <div id="codes"></div>
+  <script>
+    mocha.setup({ui: 'tdd', slow: 2000, htmlbase: ''});
+  </script>
+  <script>
+    document.addEventListener('WebComponentsReady', function() {
+      var app = document.querySelector('ceci-app');
+      var card = document.querySelector('ceci-card');
+      var counter = document.querySelector('ceci-counter');
+      mocha.setup('bdd');
+      describe('Array', function(){
+       describe('#indexOf()', function(){
+         it('should return -1 when the value is not present', function(){
+           [1,2,3].indexOf(5).should.equal(-1);
+           [1,2,3].indexOf(0).should.equal(-1);
+         })
+       })
+      })
+      describe('Array2', function(){
+       describe('#indexOf()', function(){
+         it('should return -1 when the value is not present', function(){
+           [1,2,3].indexOf(5).should.equal(-1);
+           [1,2,3].indexOf(0).should.equal(-1);
+         })
+       })
+      })
       mocha.run();
-      addSource("component source", "xml", "component.html");
-      addSource("test source", "xml", "test/html/counterSpec.html");
+      // console.log(counter);
+      // assert.equal(counter.getAttribute("increment"),1);
+      // refer to https://github.com/mozilla-appmaker/component-counter/blob/0a53902e63d7974e14b4c13a03ff1c8967cfffc2/index.html
+      // assert.equal(app.countCards(), 1);
+      // app.addCard();
+      // assert.equal(app.countCards(), 2);
+
+      // assert.equal(counter.count, 0);
+      // counter.countUp();
+      // assert.equal(counter.count, 1);
+      // counter.countDown();
+      // assert.equal(counter.count, 0);
+      // counter.countUp();
+      // counter.countUp();
+      // assert.equal(counter.count, 2);
+      // counter.resetCount();
+      // assert.equal(counter.count, 0);
+
+      // done(); // IMPORTANT that the suite ends with a call to done()
+    });
+    // mocha.run();
+    // addSource("component source", "xml", "component.html");
+    // addSource("test source", "xml", "test/html/counterSpec.html");
     </script>
   </body>
 </html>
